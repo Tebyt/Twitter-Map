@@ -67,11 +67,11 @@ var T = new Twit({
   access_token_secret:  'dr0pOppvO8mONnRozgFDGTobuNfkQeYJKGJ6yx9Nn8Ega'
 })
 
-T.get('search/tweets', { q: 'banana since:2011-07-11', count: 100 }, function(err, data, response) {
-  console.log(data)
-})
+var stream = T.stream('statuses/filter', { track: 'mango' })
 
-var stream = T.stream('statuses/sample')
+stream.on('tweet', function (tweet) {
+  console.log(tweet)
+})
 
 
 
