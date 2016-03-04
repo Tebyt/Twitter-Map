@@ -58,45 +58,45 @@ app.use(function(err, req, res, next) {
 
 // Twitter-Map
 
-// var Twit = require('twit')
+var Twit = require('twit')
 
-// var T = new Twit({
-//   consumer_key:         'NEcFV7WwVNlgt2PGzcLAd9yHs',
-//   consumer_secret:      'yrDRbggUfbWOkjHYDYHsfckBy9FLKX8f43340WVHgaTterodMJ',
-//   access_token:         '545857883-mIGQyyOKbK0gLmjLE1WWchK4PfpaRittFiBb5irj',
-//   access_token_secret:  'dr0pOppvO8mONnRozgFDGTobuNfkQeYJKGJ6yx9Nn8Ega'
-// })
+var T = new Twit({
+  consumer_key:         'NEcFV7WwVNlgt2PGzcLAd9yHs',
+  consumer_secret:      'yrDRbggUfbWOkjHYDYHsfckBy9FLKX8f43340WVHgaTterodMJ',
+  access_token:         '545857883-mIGQyyOKbK0gLmjLE1WWchK4PfpaRittFiBb5irj',
+  access_token_secret:  'dr0pOppvO8mONnRozgFDGTobuNfkQeYJKGJ6yx9Nn8Ega'
+})
 
-// T.get('search/tweets', { q: 'banana since:2011-07-11', count: 100 }, function(err, data, response) {
-//   console.log(data)
-// })
+T.get('search/tweets', { q: 'banana since:2011-07-11', count: 100 }, function(err, data, response) {
+  console.log(data)
+})
 
-// var stream = T.stream('statuses/sample')
+var stream = T.stream('statuses/sample')
 
 
 
-var Twitter = require('twitter');
+// var Twitter = require('twitter');
 
-var client = new Twitter({
-  consumer_key: "mkb4SJfnUDEtP5DuqdWl3sOWu",
-  consumer_secret: "JeYMNYqoQzX8kiHC33iTklgLcQ9upU2ftDvrKtFCrJFG8Cy8Th",
-  access_token_key: "545857883-RV7drTvRsUVygHIPGto7ozhwNd54GTs3xSmOhQDa",
-  access_token_secret: "16w3YvbvCjBxftVdVSncYLp9PmmnewlwCpr7Nw9oodrKi"
-});
+// var client = new Twitter({
+//   consumer_key: "mkb4SJfnUDEtP5DuqdWl3sOWu",
+//   consumer_secret: "JeYMNYqoQzX8kiHC33iTklgLcQ9upU2ftDvrKtFCrJFG8Cy8Th",
+//   access_token_key: "545857883-RV7drTvRsUVygHIPGto7ozhwNd54GTs3xSmOhQDa",
+//   access_token_secret: "16w3YvbvCjBxftVdVSncYLp9PmmnewlwCpr7Nw9oodrKi"
+// });
 
-/**
- * Stream statuses filtered by keyword
- * number of tweets per second depends on topic popularity
- **/
-client.stream('statuses/sample', function(stream) {
-  stream.on('message', function(tweet) {
-    console.log(tweet.text);
-  });
+// /**
+//  * Stream statuses filtered by keyword
+//  * number of tweets per second depends on topic popularity
+//  **/
+// client.stream('statuses/sample', function(stream) {
+//   stream.on('message', function(tweet) {
+//     console.log(tweet.text);
+//   });
 
-  stream.on('error', function(error) {
-    throw error;
-  });
-});
+//   stream.on('error', function(error) {
+//     throw error;
+//   });
+// });
 
 
 // ///////////
