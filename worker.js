@@ -1,9 +1,6 @@
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
-
 // Twitter-Stream
 
+var http = require('http');
 var Twit = require('twit')
 
 var T = new Twit({
@@ -41,7 +38,6 @@ function sendToDB(tweet) {
     }
     console.log(tweet);
 
-    var http = require('http');
     var data = JSON.stringify(tweet);
 
     // An object of options to indicate where to post to
@@ -88,6 +84,5 @@ function processBoundingBox(box) {
 }
 
 
-module.exports = app;
 
 
