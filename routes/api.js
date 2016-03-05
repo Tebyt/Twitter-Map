@@ -25,6 +25,7 @@ router.get('/:toSearch', function (req, res, next) {
         q: 'text:'+req.params.toSearch,
     }, function (error, data) {
         if (error) res.send(error);
+        if (data.hits.hits == 'undefined') res.json("[]");
         console.log(data);
         res.json(data.hits.hits);
     });
