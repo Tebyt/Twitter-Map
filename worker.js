@@ -36,7 +36,7 @@ function sendToDB(tweet) {
         "text": tweet.text,
         "coordinates": tweet.coordinates
     }
-    console.log(tweet);
+    // console.log(tweet);
 
     var data = JSON.stringify(tweet);
 
