@@ -11,7 +11,7 @@ var T = new Twit({
 })
 
 // getting stream from NYC
-var stream = T.stream('statuses/filter', { locations: "-74,40,-73,41" })
+var stream = T.stream('statuses/filter', { locations: "-74.164061,40.701613,-73.729204,40.866343" })
 // var stream = T.stream('statuses/sample')
 
 stream.on('tweet', function (tweet) {
