@@ -10,6 +10,7 @@ var client = new elasticsearch.Client({
     log: ['error', 'warning']
 });
 
+
 /* GET users listing. */
 router.get('/:toSearch', function (req, res, next) {
     client.search({
@@ -28,5 +29,4 @@ router.get('/:toSearch', function (req, res, next) {
     });
 
 });
-
 module.exports = router;
