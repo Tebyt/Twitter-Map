@@ -24,10 +24,10 @@ router.get('/:toSearch', function (req, res, next) {
         index: 'twitter',
         q: 'text:' + req.params.toSearch,
     }).then(function (data) {
-        if (data.hits.total == 0) res.json("[]");
-        else res.json(data.hits.hits);
+        res.json(data.hits.hits);
     }, function (err) {
         console.trace(err.message);
+        res.json("[]");
     });
 
 
