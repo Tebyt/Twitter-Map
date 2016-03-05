@@ -16,6 +16,7 @@ var stream = T.stream('statuses/filter', { locations: "-74,40,-73,41" })
 
 stream.on('tweet', function (tweet) {
     var regex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+    console.log("loading");
     if (tweet.text.match(regex)) {
         console.log("match: " + tweet.text);
     } else {
@@ -34,7 +35,8 @@ function sendToDB(tweet) {
     }
     tweet = {
         "text": tweet.text,
-        "coordinates": tweet.coordinates
+        "coordinates": tweet.coordinates,
+        "time": tweet.timestamp_ms
     }
     // console.log(tweet);
 
