@@ -16,7 +16,12 @@ router.get('/:toSearch', function (req, res, next) {
         index: 'twitter',
         q: 'text:' + req.params.toSearch,
     }).then(function (data) {
-        res.json(data.hits.hits);
+        data = data.hits.hits;
+        data = data.map(function(d) {
+            return d._source
+        })
+        console.log(data);
+        res.json(data);
     }, function (err) {
         console.trace(err.message);
         res.json("[]");
