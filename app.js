@@ -69,11 +69,8 @@ var T = new Twit({
 var stream = T.stream('statuses/filter', { locations: "-74,40,-73,41" })
 // var stream = T.stream('statuses/sample')
 
-stream.on('tweet', function (tweet) {
-    console.log("loading");
-    // if (tweet.coordinates != null) {
+stream.on('tweet', function (tweet) {=
     var regex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
-    // var regex = new RegExp(expression);
     if (tweet.text.match(regex)) {
         console.log("match: " + tweet.text);
     } else {
