@@ -71,8 +71,7 @@ var stream = T.stream('statuses/filter', { locations: "-74,40,-73,41" })
 
 stream.on('tweet', function (tweet) {
     console.log("loading");
-    if (tweet.geo != null) {
-        console.log(tweet.geo);
+    if (tweet.coordinates != null) {
         sendToDB(tweet);
     }
     // io.emit('chat message', tweet);
@@ -81,6 +80,12 @@ stream.on('tweet', function (tweet) {
 
 // Send to ElasticSearch
 function sendToDB(tweet) {
+    var id = tweet.id_str;
+    tweet = {
+        "text": tweet.text,
+        "coordinates": tweet.coordinates
+    }
+    console.log(tweet);
 
     var http = require('http');
     var data = JSON.stringify(tweet);
@@ -90,7 +95,7 @@ function sendToDB(tweet) {
         // host: '127.0.0.1',
         // port: '9200',
         hostname: 'dori-us-east-1.searchly.com',
-        path: '/twitter/' + tweet.id_str,
+        path: '/twitter/tweet/' + id,
         method: 'POST',
         auth: 'paas:8fa0549c7855701ee173a9dbe37cbfd3'
         // headers: {
