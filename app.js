@@ -28,6 +28,7 @@ var app = express();
 // app.use('/', routes);
 // app.use('/users', users);
 app.use('/api', api);
+app.set('port', process.env.PORT || 3000);
 
 
 
@@ -50,7 +51,7 @@ app.use('/api', api);
 //     });
 // });
 
-app.listen(80);
+app.listen(app.get('port'));
 
 
 // catch 404 and forward to error handler
