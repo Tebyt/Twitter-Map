@@ -70,8 +70,9 @@ var stream = T.stream('statuses/filter', { locations: "-74,40,-73,41" })
 // var stream = T.stream('statuses/sample')
 
 stream.on('tweet', function (tweet) {
+    console.log("loading");
     if (tweet.geo != null) {
-        // console.log(tweet.geo);
+        console.log(tweet.geo);
         sendToDB(tweet);
     }
     // io.emit('chat message', tweet);
@@ -80,7 +81,7 @@ stream.on('tweet', function (tweet) {
 
 // Send to ElasticSearch
 function sendToDB(tweet) {
-    
+
     var http = require('http');
     var data = JSON.stringify(tweet);
 
@@ -104,9 +105,9 @@ function sendToDB(tweet) {
         res.on('data', function (chunk) {
             console.log('Response: ' + chunk);
         });
-    }).on('error', function(e){
-    console.log(e)
-  });
+    }).on('error', function (e) {
+        console.log(e)
+    });
     // post the data
     post_req.write(data);
     post_req.end();

@@ -6,20 +6,12 @@ var router = express.Router();
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({
     host: 'paas:8fa0549c7855701ee173a9dbe37cbfd3@dori-us-east-1.searchly.com:80',
+    // host: '127.0.0.1:9200',
     log: ['error', 'warning']
-});
-
-client.ping(function (error) {
-    if (error) {
-        console.error('elasticsearch cluster is down!');
-    } else {
-        console.log('All is well');
-    }
 });
 
 /* GET users listing. */
 router.get('/:toSearch', function (req, res, next) {
-
     client.search({
         index: 'twitter',
         q: 'text:' + req.params.toSearch,
@@ -29,7 +21,6 @@ router.get('/:toSearch', function (req, res, next) {
         console.trace(err.message);
         res.json("[]");
     });
-
 
 });
 
