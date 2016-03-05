@@ -71,9 +71,15 @@ var stream = T.stream('statuses/filter', { locations: "-74,40,-73,41" })
 
 stream.on('tweet', function (tweet) {
     console.log("loading");
-    if (tweet.coordinates != null) {
+    // if (tweet.coordinates != null) {
+    var regex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+    // var regex = new RegExp(expression);
+    if (tweet.text.match(regex)) {
+        console.log("match: " + tweet.text);
+    } else {
         sendToDB(tweet);
     }
+    // }
     // io.emit('chat message', tweet);
 })
 
@@ -81,6 +87,9 @@ stream.on('tweet', function (tweet) {
 // Send to ElasticSearch
 function sendToDB(tweet) {
     var id = tweet.id_str;
+    if (tweet.coordinates == null) {
+        tweet.coordinates = processBoundingBox(tweet.place.bounding_box.coordinates[0]);
+    }
     tweet = {
         "text": tweet.text,
         "coordinates": tweet.coordinates
@@ -118,7 +127,20 @@ function sendToDB(tweet) {
     post_req.end();
 }
 
-
+function processBoundingBox(box) {
+    var coordinates = box.reduce(function (pre, cur) {
+        return [pre[0] + cur[0], pre[1] + cur[1]];
+    }).map(function (c) {
+        return c / 4;
+    })
+    // return {
+    //     "coordinates": {
+    //         "type": "Point",
+    //         "coordinates": coordinates
+    //     }
+    // }
+    return coordinates;
+}
 
 
 // catch 404 and forward to error handler
