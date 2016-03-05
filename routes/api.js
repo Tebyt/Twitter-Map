@@ -10,11 +10,11 @@ var client = new elasticsearch.Client({
 });
 
 client.ping(function (error) {
-  if (error) {
-    console.error('elasticsearch cluster is down!');
-  } else {
-    console.log('All is well');
-  }
+    if (error) {
+        console.error('elasticsearch cluster is down!');
+    } else {
+        console.log('All is well');
+    }
 });
 
 /* GET users listing. */
@@ -22,15 +22,15 @@ router.get('/:toSearch', function (req, res, next) {
 
     client.search({
         index: 'twitter',
-        q: 'text:'+req.params.toSearch,
-    }, function (error, data) {
-        if (error) res.send(error);
-        if (data.hits.hits == 'undefined') res.json("[]");
-        console.log(data);
-        res.json(data.hits.hits);
+        q: 'text:' + req.params.toSearch,
+    }).then(function (data) {
+        if (data.hits.total == 0) res.json("[]");
+        else res.json(data.hits.hits);
+    }, function (err) {
+        console.trace(err.message);
     });
 
-    
+
 });
 
 module.exports = router;
