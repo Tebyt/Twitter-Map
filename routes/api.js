@@ -21,7 +21,6 @@ router.get('/:toSearch', function (req, res, next) {
         data = data.map(function(d) {
             return d._source
         })
-        console.log(data);
         res.json(data);
     }, function (err) {
         console.trace(err.message);
