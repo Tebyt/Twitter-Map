@@ -50,9 +50,7 @@ app.use('/api', api);
 //     });
 // });
 
-app.listen(3000, function () {
-    console.log('listening on *:3000');
-});
+app.listen(80);
 
 
 // catch 404 and forward to error handler
