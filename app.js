@@ -33,23 +33,6 @@ app.set('port', process.env.PORT || 3000);
 
 
 
-// socket.io
-// var io = require('socket.io')(http);
-
-// app.get('/', function (req, res) {
-//     res.sendFile(path.join(__dirname, 'public/index.html'));
-// });
-// var send = true;
-// io.on('connection', function (socket) {
-//     console.log("connected");
-//     socket.on('chat message', function (msg) {
-//         console.log(msg);
-//         if (send) {
-//             io.emit('chat message', msg);
-//             send = false;
-//         }
-//     });
-// });
 
 app.listen(app.get('port'), function() {
     console.log('Listening on port '+app.get('port'))

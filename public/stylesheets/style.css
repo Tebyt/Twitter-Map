@@ -1,8 +1,46 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
+* {
+    
+  font: 11px "Lucida Grande", "Open Sans";
 }
 
 a {
   color: #00B7FF;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+
+
+.tweets {
+  margin: 0;
+  height: inherit;
+  overflow-y: auto;
+}
+.tweets li {
+  height: 27px;
+  line-height: 27px;
+  width: inherit;
+  vertical-align: middle;
+  /*color: #4B434D;*/
+  color: white;
+  list-style-type: none;
+  margin-bottom: 14px;
+}
+#twitter {
+    
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  height: 500px;
+  width: 300px;
+  background: black;
+  /*opacity: 0.6;*/
+}
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
 }
