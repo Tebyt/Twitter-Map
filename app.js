@@ -108,6 +108,7 @@ stream.on('tweet', function (tweet) {
 function sendToDB(tweet) {
     var id = tweet.id_str;
     var point;
+    // console.log(tweet);
     if (tweet.coordinates == null) {
         var box = tweet.place.bounding_box.coordinates[0]
         // generate a random point from bounding box

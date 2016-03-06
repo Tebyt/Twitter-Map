@@ -1,4 +1,4 @@
-
+$(document).foundation();
 mapboxgl.accessToken = 'pk.eyJ1IjoidGVieXQiLCJhIjoiY2lsZmd0c3I0MXI4dHZubWMzdXdodGp6MyJ9.yHg2aSIkgkJHYgwCVpPiwg';
 var map = new mapboxgl.Map({
     container: 'map',
@@ -53,6 +53,7 @@ function registerSocket() {
     socket.on('tweet', function (data) {
         console.log(data);
         showPoint(data);
+        $("#tweet").text(data.properties.text);
     });
 }
 
@@ -142,20 +143,9 @@ function showPoint(point) {
     start_time = Date.now();
     animatePoint(cur_point);
 }
-// function animatePoint() {
-//     map.setLayoutProperty("marker_point", 'visibility', 'visible');
-//     map.setPaintProperty("marker_point", "circle-radius", 200);
-//     map.setPaintProperty("marker_point", "circle-opacity", 0.01);
-//     window.setTimeout(function () {
-//         map.setLayoutProperty("marker_point", 'visibility', 'none');
-//         map.setPaintProperty("marker_point", "circle-radius", 1);
-//         map.setPaintProperty("marker_point", "circle-opacity", 1);
-//     }, duration)
-// }
 
 function animatePoint(id) {
     var cur_frame = Math.floor((Date.now() - start_time) / 200);
-    console.log(cur_frame);
     if (cur_frame <= 3) {
         map.setPaintProperty(id, "circle-radius", animation[cur_frame][0]);
         map.setPaintProperty(id, "circle-opacity", animation[cur_frame][1]);

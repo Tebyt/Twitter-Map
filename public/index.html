@@ -3,21 +3,39 @@
 
 <head>
     <meta charset='utf-8' />
-    <title></title>
+    <title>Twitter-Map</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.15.0/mapbox-gl.js'></script>
-    <script src='https://code.jquery.com/jquery-2.2.1.min.js'></script>
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.min.css">
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.15.0/mapbox-gl.css' rel='stylesheet' />
+
+
+    <link rel="stylesheet" href="stylesheets/app.css" />
     <link href='stylesheets/style.css' rel='stylesheet' />
+
+
+
 </head>
 
 <body>
+
     <div id='map'></div>
     <!--<div id='twitter'>
-        <ul class='tweets', id='tweets'></ul>
+        <ul class='tweets' , id='tweets'></ul>
     </div>-->
+
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css" rel="stylesheet">
+
+    <div class="row">
+        <div class="small-6 columns small-centered">
+            <div data-alert class="alert-box info" id ="alert">
+                <span id="tweet">Real-Time Tweets</span>
+            </div>
+        </div>
+    </div>
+    <script src='https://code.jquery.com/jquery-2.2.1.min.js'></script>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.15.0/mapbox-gl.js'></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/js/foundation.min.js"></script>
     <script src='javascripts/viz.js'></script>
 </body>
 
