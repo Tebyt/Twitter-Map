@@ -1,8 +1,35 @@
 // Twitter-Stream
 
 var http = require('http');
-var Twit = require('twit')
+var Twit = require('twit');
+var random = require('geojson-random');
+var randomPointsOnPolygon = require('random-points-on-polygon');
+var turf = require('turf');
+var fs = require("fs");
 
+// read file
+function readJsonFileSync(filepath, encoding) {
+
+    if (typeof (encoding) == 'undefined') {
+        encoding = 'utf8';
+    }
+    var file = fs.readFileSync(filepath, encoding);
+    return JSON.parse(file);
+}
+
+function readJson(file) {
+
+    var filepath = __dirname + '/' + file;
+    return readJsonFileSync(filepath);
+}
+
+//assume that config.json is in application root
+
+
+var manhattan = readJson('manhattan.geojson');
+
+
+// Tweet stream
 var T = new Twit({
     consumer_key: 'NEcFV7WwVNlgt2PGzcLAd9yHs',
     consumer_secret: 'yrDRbggUfbWOkjHYDYHsfckBy9FLKX8f43340WVHgaTterodMJ',
@@ -11,17 +38,18 @@ var T = new Twit({
 })
 
 // getting stream from NYC
-var stream = T.stream('statuses/filter', { locations: "-74.164061,40.701613,-73.729204,40.866343" })
+var stream = T.stream('statuses/filter', { locations: "-73.999730,40.752123,-73.975167,40.762188" })
 // var stream = T.stream('statuses/sample')
 
 stream.on('tweet', function (tweet) {
-    var regex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
-    console.log("loading");
-    if (tweet.text.match(regex)) {
-        console.log("match: " + tweet.text);
-    } else {
-        sendToDB(tweet);
-    }
+    // var regex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+    // console.log("loading");
+    // if (tweet.text.match(regex)) {
+    //     console.log("has url: " + tweet.text);
+    // } else {
+    console.log("loading")
+    sendToDB(tweet);
+    // }
     // }
     // io.emit('chat message', tweet);
 })
@@ -30,17 +58,32 @@ stream.on('tweet', function (tweet) {
 // Send to ElasticSearch
 function sendToDB(tweet) {
     var id = tweet.id_str;
+    var point;
     if (tweet.coordinates == null) {
-        tweet.coordinates = processBoundingBox(tweet.place.bounding_box.coordinates[0]);
+        var box = tweet.place.bounding_box.coordinates[0]
+        // generate a random point from bounding box
+        point = turf.random('points', 1, {
+            bbox: [box[0][0], box[0][1], box[2][0], box[2][1]]
+        }).features[0];
+    } else {
+        point = {
+            "type": "Feature",
+            "geometry": tweet.coordinates
+        }
     }
-    tweet = {
+    var valid = manhattan.features.some(function (f) {
+        if (turf.inside(point, f)) {
+            return true;
+        }
+    })
+    if (!valid) return;
+    point.properties = {
+        "id": tweet.id,
         "text": tweet.text,
-        "coordinates": tweet.coordinates,
         "time": tweet.timestamp_ms
     }
-    // console.log(tweet);
-
-    var data = JSON.stringify(tweet);
+    console.log(point);
+    var data = JSON.stringify(point);
 
     // An object of options to indicate where to post to
     var post_options = {
@@ -69,22 +112,6 @@ function sendToDB(tweet) {
     post_req.write(data);
     post_req.end();
 }
-
-function processBoundingBox(box) {
-    var coordinates = box.reduce(function (pre, cur) {
-        return [pre[0] + cur[0], pre[1] + cur[1]];
-    }).map(function (c) {
-        return c / 4;
-    })
-    // return {
-    //     "coordinates": {
-    //         "type": "Point",
-    //         "coordinates": coordinates
-    //     }
-    // }
-    return coordinates;
-}
-
 
 
 

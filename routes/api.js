@@ -10,15 +10,43 @@ var client = new elasticsearch.Client({
     log: ['error', 'warning']
 });
 
+router.get('/', function (req, res, next) {
+    client.search({
+        index: 'twitter',
+        type: 'tweet',
+        body: {
+            query: {
+                "match_all": {}
+            },
+            size: 10000
+        }
+    }).then(function (data) {
+        data = data.hits.hits;
+        data = data.map(function (d) {
+            return d._source
+        })
+        res.json(data);
+    }, function (err) {
+        console.trace(err.message);
+        res.json("[]");
+    });
 
-/* GET users listing. */
+});
+
 router.get('/:toSearch', function (req, res, next) {
     client.search({
         index: 'twitter',
-        q: 'text:' + req.params.toSearch,
+        type: 'tweet',
+        body: {
+            query: {
+                "match": {
+                    "properties.text": req.params.toSearch
+                }
+            }
+        }
     }).then(function (data) {
         data = data.hits.hits;
-        data = data.map(function(d) {
+        data = data.map(function (d) {
             return d._source
         })
         res.json(data);

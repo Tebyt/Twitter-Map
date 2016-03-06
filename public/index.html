@@ -1,79 +1,59 @@
-<!--<!doctype html>
+<!DOCTYPE html>
 <html>
 
 <head>
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
-    <script>
-        var data;
-        var socket = io();
-        $('form').submit(function(){
-            socket.emit('chat message', $('#m').val());
-            $('#m').val('');
-            return false;
-        });
-        socket.on('chat message', function(msg){
-            // $('#messages').append($('<li>').text(msg));
-            data = msg;
-            console.log(msg);
-        });
-    </script>
-    <title>Socket.IO chat</title>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.15.0/mapbox-gl.js'></script>
+    <script src='https://code.jquery.com/jquery-2.2.1.min.js'></script>
+    
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.15.0/mapbox-gl.css' rel='stylesheet' />
     <style>
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
         
-        body {
-            font: 13px Helvetica, Arial;
-        }
-        
-        form {
-            background: #000;
-            padding: 3px;
-            position: fixed;
+        #map {
+            position: absolute;
+            top: 0;
             bottom: 0;
             width: 100%;
         }
+        .filter-ctrl {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+            width: 180px;
+        }
         
-        form input {
+        .filter-ctrl input[type=text] {
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            width: 100%;
             border: 0;
-            padding: 10px;
-            width: 90%;
-            margin-right: .5%;
-        }
-        
-        form button {
-            width: 9%;
-            background: rgb(130, 224, 255);
-            border: none;
-            padding: 10px;
-        }
-        
-        #messages {
-            list-style-type: none;
+            background-color: #fff;
+            height: 40px;
             margin: 0;
-            padding: 0;
-        }
-        
-        #messages li {
-            padding: 5px 10px;
-        }
-        
-        #messages li:nth-child(odd) {
-            background: #eee;
+            color: rgba(0, 0, 0, .5);
+            padding: 10px;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
         }
     </style>
 </head>
 
 <body>
-    <ul id="messages"></ul>
-    <form action="">
-        <input id="m" autocomplete="off" />
-        <button>Send</button>
-    </form>
+
+    <style>
+        
+    </style>
+    <div id='map'></div>
+    <div class='filter-ctrl'>
+        <input id='filter-input' type='text' name='filter' placeholder='Filter by name' />
+    </div>
+    <script src='javascripts/viz.js'></script>
 </body>
 
-</html>-->
+</html>
