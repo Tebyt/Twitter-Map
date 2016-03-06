@@ -3,9 +3,9 @@ var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/dark-v8',
     center: [-73.961425, 40.786338],
-    scrollZoom: false,
+    // scrollZoom: false,
     // maxZoom: 10,
-    minZoom: 10.7
+    // minZoom: 10.7
 });
 var global_dataset;
 map.on('style.load', function () {
