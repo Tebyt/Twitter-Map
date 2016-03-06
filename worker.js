@@ -2,8 +2,6 @@
 
 var http = require('http');
 var Twit = require('twit');
-var random = require('geojson-random');
-var randomPointsOnPolygon = require('random-points-on-polygon');
 var turf = require('turf');
 var fs = require("fs");
 
