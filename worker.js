@@ -1,36 +1,7 @@
 
-// socket.io
-var express = require('express');
-var path = require('path');
-var app = express();
-var http = require('http');
-var server = http.Server(app);
-var io = require('socket.io')(server);
-app.set('port', process.env.PORT || 80);
-
-
-
-// app.use(express.static(path.join(__dirname, 'public')));
-
-
-server.listen(app.get('port'), function() {
-    console.log('Listening on port '+app.get('port'))
-});
-
-
-io.on('connection', function (socket) {
-    console.log("connected");
-    // socket.on('chat message', function (msg) {
-    //     console.log(msg);
-    //     if (send) {
-    //         io.emit('chat message', msg);
-    //         send = false;
-    //     }
-    // });
-});
-
 // Twitter-Stream
 
+var http = require('http');
 var Twit = require('twit');
 var turf = require('turf');
 var fs = require("fs");
@@ -75,7 +46,7 @@ stream.on('tweet', function (tweet) {
     // if (tweet.text.match(regex)) {
     //     console.log("has url: " + tweet.text);
     // } else {
-    console.log("loading");
+    console.log("loading")
     sendToDB(tweet);
     // }
     // }
@@ -110,10 +81,6 @@ function sendToDB(tweet) {
         "text": tweet.text,
         "time": tweet.timestamp_ms
     }
-    
-    // send to front-end
-    io.emit('tweet', point);
-    
     console.log(point);
     var data = JSON.stringify(point);
 
@@ -144,6 +111,6 @@ function sendToDB(tweet) {
     post_req.write(data);
     post_req.end();
 }
-module.exports = app;
+
 
 

@@ -23,7 +23,6 @@ function initMarkerTemp() {
     };
 }
 
-// var socket = io.connect('http://127.0.0.1:8080/');
 var socket = io.connect();
 socket.on('tweet', function (data) {
     console.log(data);
@@ -140,8 +139,7 @@ function registerMarker() {
 
 function fetchAllPoints(callback) {
     console.log("fetching data");
-    $.getJSON("https://twitter-map-tebyt.herokuapp.com/api/", function (data) {
-    // $.getJSON("http://127.0.0.1:3000/api/", function (data) {
+    $.getJSON("/api/", function (data) {
         console.log("fetched");
         marker_all = {
             "type": "FeatureCollection",
