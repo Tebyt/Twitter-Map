@@ -1,13 +1,16 @@
 
 // socket.io
-var app = require('express')();
+var express = require('express');
+var path = require('path');
+var app = express();
 var http = require('http');
 var server = http.Server(app);
 var io = require('socket.io')(server);
-app.set('port', 8080);
+app.set('port', process.env.PORT || 80);
 
 
 
+// app.use(express.static(path.join(__dirname, 'public')));
 
 
 server.listen(app.get('port'), function() {
