@@ -4,7 +4,7 @@ var app = require('express')();
 var http = require('http');
 var server = http.Server(app);
 var io = require('socket.io')(server);
-app.set('port', process.env.PORT || 8080);
+app.set('port', 8080);
 
 
 

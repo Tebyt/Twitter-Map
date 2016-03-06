@@ -24,7 +24,7 @@ function initMarkerTemp() {
 }
 
 // var socket = io.connect('http://127.0.0.1:8080/');
-var socket = io.connect();
+var socket = io.connect('https://twitter-map-tebyt.herokuapp.com:8080');
 socket.on('tweet', function (data) {
     console.log(data);
     showPoint(data);
