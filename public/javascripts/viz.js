@@ -6,6 +6,7 @@ var map = new mapboxgl.Map({
     // scrollZoom: false,
     // maxZoom: 10,
     // minZoom: 10.7
+    zoom: 10.7
 });
 var global_dataset;
 map.on('style.load', function () {
