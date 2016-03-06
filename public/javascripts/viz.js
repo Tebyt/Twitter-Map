@@ -1,5 +1,3 @@
-var worker = require('../../worker.js');
-var port = worker.get('port');
 
 mapboxgl.accessToken = 'pk.eyJ1IjoidGVieXQiLCJhIjoiY2lsZmd0c3I0MXI4dHZubWMzdXdodGp6MyJ9.yHg2aSIkgkJHYgwCVpPiwg';
 var duration = 2000;
@@ -26,7 +24,7 @@ function initMarkerTemp() {
 }
 
 // var socket = io.connect('http://127.0.0.1:8080/');
-var socket = io.connect('https://twitter-map-tebyt.herokuapp.com/'+port);
+var socket = io.connect();
 socket.on('tweet', function (data) {
     console.log(data);
     showPoint(data);
