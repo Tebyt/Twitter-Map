@@ -24,7 +24,7 @@ function init() {
 function registerMarkers() {
     registerMarker("marker_all", "yellow");
     registerMarker("marker_search", "yellow");
-    registerMarker("marker_temp", "yellow");
+    registerMarker("marker_temp", "lightblue");
 }
 
 function registerMarker(name, color) {
@@ -57,26 +57,48 @@ function registerSocket() {
     });
 }
 
-function filterData(key) {
-    var filtered_data = marker_all.features.filter(function (d) {
-        return d.properties.text.indexOf(key) >= 0;
+
+
+function emptyData(marker) {
+    window[marker].features = [];
+    refreshData(marker);
+}
+function refreshData(marker) {
+    map.getSource(marker).setData(window[marker]);
+}
+
+function fetchAllPoints() {
+    console.log("fetching data");
+    $.getJSON("/api/", function (data) {
+        console.log("fetched");
+        marker_all.features = data;
+        showAllPoints();
     })
-    marker_search = {
-        "type": "FeatureCollection",
-        "features": filtered_data
-    }
-    console.log(marker_search);
-    showFilteredPoints();
-    // showTweets(filtered_data, key);
+}
+
+function showAllPoints() {
+    emptyData("marker_temp");
+    refreshData("marker_all");
+    map.setLayoutProperty("marker_search", 'visibility', 'none');
+    map.setLayoutProperty("marker_all", 'visibility', 'visible');
+}
+
+function fetchFilteredPoints(key) {
+    console.log("fetching data");
+    $.getJSON("/api/"+key, function (data) {
+        console.log("fetched");
+        marker_search.features = data;
+        showFilteredPoints();
+        showTweets(data, key);
+    })
 }
 
 function showFilteredPoints() {
-    emptyData("marker_tmp");
+    emptyData("marker_temp");
     refreshData("marker_search");
-    map.setLayoutProperty("all", 'visibility', 'none');
-    map.setLayoutProperty("search", 'visibility', 'visible');
+    map.setLayoutProperty("marker_all", 'visibility', 'none');
+    map.setLayoutProperty("marker_search", 'visibility', 'visible');
 }
-
 
 function showTweets(data, key) {
     data.forEach(function (d) {
@@ -100,30 +122,6 @@ function showTweet(tweet, key, div) {
     $(div).append(t);
 }
 
-function showAllPoints() {
-    emptyData("marker_temp");
-    refreshData("marker_all");
-    map.setLayoutProperty("marker_search", 'visibility', 'none');
-    map.setLayoutProperty("marker_all", 'visibility', 'visible');
-}
-
-function emptyData(marker) {
-    window[marker].features = [];
-    refreshData(marker);
-}
-function refreshData(marker) {
-    map.getSource(marker).setData(window[marker]);
-}
-
-
-function fetchAllPoints() {
-    console.log("fetching data");
-    $.getJSON("/api/", function (data) {
-        console.log("fetched");
-        marker_all.features = data;
-        showAllPoints();
-    })
-}
 
 // For point animation
 var animation = [[1, 1], [3, 1], [20, 0.5], [200, 0]];
