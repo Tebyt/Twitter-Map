@@ -1,6 +1,6 @@
 
 // ElasticSearch
-var index_name = "tests";
+var index_name = "twitter";
 var type_name = "tweets";
 
 var elasticsearch = require('elasticsearch');
