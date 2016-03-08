@@ -1,6 +1,6 @@
 
 // ElasticSearch
-var index_name = "weweer";
+var index_name = "tests";
 var type_name = "tweets";
 
 var elasticsearch = require('elasticsearch');
@@ -101,8 +101,8 @@ function initSetting() {
                 "filter": {
                     "nGram_filter": {
                         "type": "nGram",
-                        "min_gram": 2,
-                        "max_gram": 20,
+                        "min_gram": 1,
+                        "max_gram": 10,
                         "token_chars": [
                             "letter",
                             "digit",

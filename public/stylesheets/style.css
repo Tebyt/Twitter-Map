@@ -43,12 +43,16 @@ body {
 #tweets li {
   /*height: 27px;*/
   /*line-height: 27px;*/
+  font-size: 15px;
   width: inherit;
   color: white;
   list-style-type: none;
   padding-bottom: 5px;
   margin-bottom: 5px;
   border-bottom: silver 2px dotted;
+}
+b {
+    font-size: 18px;
 }
 #map {
     position: absolute;

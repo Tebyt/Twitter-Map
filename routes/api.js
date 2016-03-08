@@ -37,7 +37,7 @@ router.get('/text/:toSearch', function (req, res) {
     });
 });
 router.get('/text/autocomplete/:toSearch', function (req, res) {
-    console.log(req.params.toSearch);
+    // console.log(req.params.toSearch);
     db.searchByText(req.params.toSearch).then(function (data) {
         data = data.map(function (d) {
             return d.properties.text;

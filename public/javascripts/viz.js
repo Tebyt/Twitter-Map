@@ -11,17 +11,6 @@ var map = new mapboxgl.Map({
 
 });
 
-d3.select("#search").on("keyup", function() {
-    var text = d3.select("#search").property('value');
-    console.log(text);
-    var host = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
-    d3.json(host+"/api/text/autocomplete/"+text, function(data) {
-        console.log(data);
-        if (data.length == 0) d3.select("#tweets").html("");
-        d3.select("#tweets").selectAll("li").data(data).enter().append("li").text(data);
-    })
-})
-
 
 map.on('style.load', function () {
     init();
@@ -96,11 +85,10 @@ function showAllPoints() {
 
 function fetchFilteredPoints(key) {
     console.log("fetching data");
-    $.getJSON("/api/text"+key, function (data) {
+    $.getJSON("/api/text" + key, function (data) {
         console.log("fetched");
         marker_search.features = data;
         showFilteredPoints();
-        showTweets(data, key);
     })
 }
 
@@ -111,27 +99,58 @@ function showFilteredPoints() {
     map.setLayoutProperty("marker_search", 'visibility', 'visible');
 }
 
-function showTweets(data, key) {
-    data.forEach(function (d) {
-        showTweet(d.properties, key, "#tweets");
+d3.select("#search").on("keyup", function () {
+    var key = d3.select("#search").property('value');
+    var keyCode = d3.event.keyCode;
+    console.log(keyCode);
+    // console.log(text);
+    var host = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
+    d3.json(host + "/api/text/autocomplete/" + key, function (data) {
+        d3.select("#tweets").html("");
+        if (data.length > 0) {
+            var partial = keyCode != 13
+            showTweets(data, key, partial);
+        }
     })
+}).on("")
 
+function showTweets(tweets, key, partial) {
+    tweets = tweets.map(function (d) {
+        var index = d.indexOf(key)
+        if (index < 0 ) return "";
+        else {
+            if (partial) d = d.substring(index, index + 20);
+            return d.replace(new RegExp(key, 'i'), '<u><b>$&</b></u>');
+        } 
+    }).filter(function(d) {
+        return d != "";
+    })
+    console.log(tweets);
+    var div = d3.select("#tweets").selectAll("li").data(tweets);
+    div.enter().append("li").html(function(d) {return d});
+    div.exit().remove();
 }
-function showTweet(tweet, key, div) {
-    var text = $('<span class="tweet">').text(tweet.text);
-    var str = text.text().replace(key, '<b>$1</b>');
-    text.html(str);
-    var t = $('<li>');
-    //   t.append($('<img>').attr('src', data.img));
-    t.append(text);
-    //   t.append($('<a class="time">')
-    //    .attr('href', 'https://twitter.com/' + data.user + '/status/' + data.id)
-    //    .attr('target', '_blank')
-    //    .data('time', data.at)
-    //    .text(pretty(data.at) || 'now')
-    //   );
-    $(div).append(t);
-}
+// function showTweets(data, key) {
+//     data.forEach(function (d) {
+//         showTweet(d.properties, key, "#tweets");
+//     })
+
+// }
+// function showTweet(tweet, key, div) {
+//     var text = $('<span class="tweet">').text(tweet.text);
+//     var str = text.text().replace(key, '<h3>$1</h3>');
+//     text.html(str);
+//     var t = $('<li>');
+//     //   t.append($('<img>').attr('src', data.img));
+//     t.append(text);
+//     //   t.append($('<a class="time">')
+//     //    .attr('href', 'https://twitter.com/' + data.user + '/status/' + data.id)
+//     //    .attr('target', '_blank')
+//     //    .data('time', data.at)
+//     //    .text(pretty(data.at) || 'now')
+//     //   );
+//     $(div).append(t);
+// }
 
 
 // For point animation
@@ -143,8 +162,8 @@ function showPoint(point) {
     marker_all.features.push(point);
     marker_temp.features.push(point);
     refreshData("marker_temp");
-    
-    var cur_point = "marker_point"+id;
+
+    var cur_point = "marker_point" + id;
     ++id;
     registerMarker(cur_point, "lightblue");
     window[cur_point].features = [point];
@@ -158,7 +177,7 @@ function animatePoint(id) {
     if (cur_frame <= 3) {
         map.setPaintProperty(id, "circle-radius", animation[cur_frame][0]);
         map.setPaintProperty(id, "circle-opacity", animation[cur_frame][1]);
-        requestAnimationFrame(function() {
+        requestAnimationFrame(function () {
             animatePoint(id);
         });
     } else {
