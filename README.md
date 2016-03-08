@@ -10,7 +10,7 @@ The elasticsearch database is provided by [Searchly](http://www.searchly.com)
 
 ####Root: /api
 
-**GET / ** Get all the tweets
+**GET /** Get all the tweets
 
 **GET /text/:toSearch** Get tweets by text
 
