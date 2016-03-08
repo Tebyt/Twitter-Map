@@ -1,5 +1,7 @@
 # Twitter-Map
 
+Github Page <https://github.com/Tebyt/Twitter-Map>
+
 The website is deployed on heroku and is hosted on <http://twitter-map-tebyt.herokuapp.com>
 
 The elasticsearch database is provided by [Searchly](http://www.searchly.com)
