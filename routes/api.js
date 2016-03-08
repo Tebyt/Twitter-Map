@@ -10,7 +10,6 @@ db.createIndexIfNotExist();
 //     db.createIndexIfNotExist();
 // })
 router.post('/:id', function (req, res) {
-    console.log(req.body);
     db.addTweet(req.body, req.params.id)
         .then(function (resp) {
             res.json(resp)
