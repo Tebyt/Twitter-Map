@@ -2,8 +2,8 @@ var express = require('express');
 var path = require('path');
 // var favicon = require('serve-favicon');
 // var logger = require('morgan');
-// var cookieParser = require('cookie-parser');
-// var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
 // var routes = require('./routes/index');
 // var users = require('./routes/users');
@@ -22,32 +22,24 @@ app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 // app.use(logger('dev'));
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/', routes);
 // app.use('/users', users);
 app.use('/api', api);
-app.set('port', process.env.PORT || 3000);
+app.set('port', 3000);
 
-
-server.listen(app.get('port'), function() {
-    console.log('Listening on port '+app.get('port'))
+server.listen(app.get('port'), function () {
+    console.log('Listening on port ' + app.get('port'))
 });
 
 // Socket.io
 var io = require('socket.io')(server);
 io.on('connection', function (socket) {
     console.log("connected");
-    // socket.on('chat message', function (msg) {
-    //     console.log(msg);
-    //     if (send) {
-    //         io.emit('chat message', msg);
-    //         send = false;
-    //     }
-    // });
 });
 
 // Twitter-Stream
@@ -72,18 +64,15 @@ function readJson(file) {
     return readJsonFileSync(filepath);
 }
 
-//assume that config.json is in application root
-
-
 var manhattan = readJson('manhattan.geojson');
 
 
 // Tweet stream
 var T = new Twit({
-    consumer_key: 'NEcFV7WwVNlgt2PGzcLAd9yHs',
-    consumer_secret: 'yrDRbggUfbWOkjHYDYHsfckBy9FLKX8f43340WVHgaTterodMJ',
-    access_token: '545857883-mIGQyyOKbK0gLmjLE1WWchK4PfpaRittFiBb5irj',
-    access_token_secret: 'dr0pOppvO8mONnRozgFDGTobuNfkQeYJKGJ6yx9Nn8Ega'
+    consumer_key: 'mkb4SJfnUDEtP5DuqdWl3sOWu',
+    consumer_secret: 'JeYMNYqoQzX8kiHC33iTklgLcQ9upU2ftDvrKtFCrJFG8Cy8Th',
+    access_token: '545857883-RV7drTvRsUVygHIPGto7ozhwNd54GTs3xSmOhQDa',
+    access_token_secret: '16w3YvbvCjBxftVdVSncYLp9PmmnewlwCpr7Nw9oodrKi'
 })
 
 // getting stream from NYC
@@ -96,11 +85,12 @@ stream.on('tweet', function (tweet) {
     // if (tweet.text.match(regex)) {
     //     console.log("has url: " + tweet.text);
     // } else {
+
     console.log("loading");
     sendToDB(tweet);
+    io.emit('chat message', tweet);
     // }
     // }
-    // io.emit('chat message', tweet);
 })
 
 
@@ -108,7 +98,6 @@ stream.on('tweet', function (tweet) {
 function sendToDB(tweet) {
     var id = tweet.id_str;
     var point;
-    // console.log(tweet);
     if (tweet.coordinates == null) {
         var box = tweet.place.bounding_box.coordinates[0]
         // generate a random point from bounding box
@@ -128,29 +117,24 @@ function sendToDB(tweet) {
     })
     if (!valid) return;
     point.properties = {
-        "id": tweet.id,
         "text": tweet.text,
         "time": tweet.timestamp_ms
     }
     
     // send to front-end
     io.emit('tweet', point);
-    
-    console.log(point);
+
     var data = JSON.stringify(point);
 
-    // An object of options to indicate where to post to
     var post_options = {
-        // host: '127.0.0.1',
-        // port: '9200',
-        hostname: 'dori-us-east-1.searchly.com',
-        path: '/twitter/tweet/' + id,
+        host: 'localhost',
+        port: '3000',
+        path: '/api/' + id,
         method: 'POST',
-        auth: 'paas:8fa0549c7855701ee173a9dbe37cbfd3'
-        // headers: {
-        //     'Content-Type': 'application/json',
-        //     'Content-Length': Buffer.byteLength(data)
-        // }
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': data.length
+        }
     };
 
     // Set up the request
@@ -163,6 +147,7 @@ function sendToDB(tweet) {
         console.log(e)
     });
     // post the data
+    // console.log(data);
     post_req.write(data);
     post_req.end();
 }

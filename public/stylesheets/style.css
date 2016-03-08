@@ -37,16 +37,18 @@ body {
 
 #tweets {
   margin: 3;
-  height: inherit;
-  overflow-y: auto;
+  height: 90%;
+  overflow-y: scroll;
 }
 #tweets li {
-  height: 27px;
-  line-height: 27px;
+  /*height: 27px;*/
+  /*line-height: 27px;*/
   width: inherit;
-  vertical-align: middle;
   color: white;
   list-style-type: none;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  border-bottom: silver 2px dotted;
 }
 #map {
     position: absolute;

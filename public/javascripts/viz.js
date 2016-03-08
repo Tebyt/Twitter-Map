@@ -11,6 +11,16 @@ var map = new mapboxgl.Map({
 
 });
 
+d3.select("#search").on("keyup", function() {
+    var text = d3.select("#search").property('value');
+    console.log(text);
+    d3.json("http://localhost:3000/api/text/autocomplete/"+text, function(data) {
+        console.log(data);
+        if (data.length == 0) d3.select("#tweets").html("");
+        d3.select("#tweets").selectAll("li").data(data).enter().append("li").text(data);
+    })
+})
+
 
 map.on('style.load', function () {
     init();
@@ -51,9 +61,9 @@ function registerMarker(name, color) {
 function registerSocket() {
     socket = io.connect();
     socket.on('tweet', function (data) {
-        console.log(data);
+        // console.log(data);
         showPoint(data);
-        $("#tweet").text(data.properties.text);
+        d3.select("#tweet").text(data.properties.text);
     });
 }
 
@@ -85,7 +95,7 @@ function showAllPoints() {
 
 function fetchFilteredPoints(key) {
     console.log("fetching data");
-    $.getJSON("/api/"+key, function (data) {
+    $.getJSON("/api/text"+key, function (data) {
         console.log("fetched");
         marker_search.features = data;
         showFilteredPoints();

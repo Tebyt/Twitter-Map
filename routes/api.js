@@ -1,59 +1,52 @@
 var express = require('express');
 var router = express.Router();
+var db = require('../db.js');
 
-// ElasticSearch
 
-var elasticsearch = require('elasticsearch');
-var client = new elasticsearch.Client({
-    host: 'paas:8fa0549c7855701ee173a9dbe37cbfd3@dori-us-east-1.searchly.com:80',
-    // host: '127.0.0.1:9200',
-    log: ['error', 'warning']
+db.createIndexIfNotExist();
+
+// router.get('/test', function (req, res, next) {
+//     console.log("testing");
+//     db.createIndexIfNotExist();
+// })
+router.post('/:id', function (req, res) {
+    console.log(req.body);
+    db.addTweet(req.body, req.params.id)
+        .then(function (resp) {
+            res.json(resp)
+        });
+})
+router.get('/', function (req, res) {
+    db.getAllTweets().then(function (data) {
+        res.json(data);
+    }, function (err) {
+        console.trace(err.message);
+        res.json("[]");
+    });
 });
-
-router.get('/', function (req, res, next) {
-    client.search({
-        index: 'twitter',
-        type: 'tweet',
-        body: {
-            query: {
-                "match_all": {}
-            },
-            size: 10000
-        }
-    }).then(function (data) {
-        data = data.hits.hits;
+router.delete('/', function (req, res) {
+    db.deleteAndCreateIndex().then(function (resp) {
+        res.send(resp)
+    });
+})
+router.get('/text/:toSearch', function (req, res) {
+    db.searchByText(req.params.toSearch).then(function (data) {
+        res.json(data);
+    }, function (err) {
+        console.trace(err.message);
+        res.json("[]");
+    });
+});
+router.get('/text/autocomplete/:toSearch', function (req, res) {
+    console.log(req.params.toSearch);
+    db.searchByText(req.params.toSearch).then(function (data) {
         data = data.map(function (d) {
-            return d._source
+            return d.properties.text;
         })
         res.json(data);
     }, function (err) {
         console.trace(err.message);
         res.json("[]");
     });
-
-});
-
-router.get('/:toSearch', function (req, res, next) {
-    client.search({
-        index: 'twitter',
-        type: 'tweet',
-        body: {
-            query: {
-                "match": {
-                    "properties.text": req.params.toSearch
-                }
-            }
-        }
-    }).then(function (data) {
-        data = data.hits.hits;
-        data = data.map(function (d) {
-            return d._source
-        })
-        res.json(data);
-    }, function (err) {
-        console.trace(err.message);
-        res.json("[]");
-    });
-
-});
+})
 module.exports = router;
