@@ -5,7 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-// var routes = require('./routes/index');
+var routes = require('./routes/index');
 // var users = require('./routes/users');
 var api = require('./routes/api');
 
@@ -27,10 +27,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/', routes);
+app.use('/', routes);
 // app.use('/users', users);
 app.use('/api', api);
-app.set('port', 3000);
+app.set('port', process.env.PORT || 3000);
 
 server.listen(app.get('port'), function () {
     console.log('Listening on port ' + app.get('port'))
@@ -128,7 +128,7 @@ function sendToDB(tweet) {
 
     var post_options = {
         host: 'localhost',
-        port: '3000',
+        port: app.get('port'),
         path: '/api/' + id,
         method: 'POST',
         headers: {

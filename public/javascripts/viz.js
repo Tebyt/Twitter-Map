@@ -14,7 +14,8 @@ var map = new mapboxgl.Map({
 d3.select("#search").on("keyup", function() {
     var text = d3.select("#search").property('value');
     console.log(text);
-    d3.json("http://localhost:3000/api/text/autocomplete/"+text, function(data) {
+    var host = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
+    d3.json(host+"/api/text/autocomplete/"+text, function(data) {
         console.log(data);
         if (data.length == 0) d3.select("#tweets").html("");
         d3.select("#tweets").selectAll("li").data(data).enter().append("li").text(data);
