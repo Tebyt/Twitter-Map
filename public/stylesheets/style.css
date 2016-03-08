@@ -1,6 +1,6 @@
 
 * {   
-    font: 11px "Lucida Grande", "Open Sans";
+    font: 15px "Lucida Grande", "Open Sans";
 }
 a {
     color: #00B7FF;
@@ -33,17 +33,17 @@ body {
     bottom: 10px;
     right: 10px;
     width: 300px;
+    overflow: hidden;
 }
-
 #tweets {
   margin: 3;
   height: 90%;
-  overflow-y: scroll;
+  overflow-y: auto;
+  word-wrap: break-word;
 }
-#tweets li {
+li {
   /*height: 27px;*/
   /*line-height: 27px;*/
-  font-size: 15px;
   width: inherit;
   color: white;
   list-style-type: none;

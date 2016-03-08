@@ -173,7 +173,8 @@ function searchByText(text) {
                 "match": {
                     "properties.text": text
                 }
-            }
+            },
+            size: 2000
         }
     }).then(function (data) {
         data = data.hits.hits;

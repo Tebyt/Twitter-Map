@@ -102,7 +102,6 @@ function showFilteredPoints() {
 d3.select("#search").on("keyup", function () {
     var key = d3.select("#search").property('value');
     var keyCode = d3.event.keyCode;
-    console.log(keyCode);
     // console.log(text);
     var host = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
     d3.json(host + "/api/text/autocomplete/" + key, function (data) {
@@ -112,7 +111,7 @@ d3.select("#search").on("keyup", function () {
             showTweets(data, key, partial);
         }
     })
-}).on("")
+})
 
 function showTweets(tweets, key, partial) {
     tweets = tweets.map(function (d) {
@@ -125,7 +124,6 @@ function showTweets(tweets, key, partial) {
     }).filter(function(d) {
         return d != "";
     })
-    console.log(tweets);
     var div = d3.select("#tweets").selectAll("li").data(tweets);
     div.enter().append("li").html(function(d) {return d});
     div.exit().remove();
