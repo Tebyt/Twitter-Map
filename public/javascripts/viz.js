@@ -12,6 +12,11 @@ var map = new mapboxgl.Map({
 });
 var host = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
 
+d3.select("#refresh").on("click", function() {
+    showAllPoints();
+    hideTweets();
+    d3.select("#search").property('value', "");
+})
 map.on('click', function (data) {
     data = data.lngLat;
     var url = '/api/coordinates/' + data.lat + '/' + data.lng;
@@ -169,8 +174,12 @@ function showFull(data) {
     }
 }
 
-function showTweets(tweets) {
+function hideTweets() {
     d3.select("#tweets").html("");
+}
+
+function showTweets(tweets) {
+    hideTweets()
     var div = d3.select("#tweets").selectAll("li").data(tweets);
     div.enter().append("li").html(function (d) { return d });
     div.exit().remove();

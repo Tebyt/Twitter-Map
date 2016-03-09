@@ -203,7 +203,8 @@ function searchByCoordinates(coordinates, diameter) {
                             }
                         }
                     }
-                }
+                },
+                "size": 100
             }
     }).then(function (data) {
         data = data.hits.hits;
