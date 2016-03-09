@@ -1,12 +1,12 @@
 
 // ElasticSearch
-var index_name = "test";
+var index_name = "temp";
 var type_name = "tweets";
 
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({
-    // host: 'paas:8fa0549c7855701ee173a9dbe37cbfd3@dori-us-east-1.searchly.com:80',
-    host: '127.0.0.1:9200',
+    host: 'paas:8fa0549c7855701ee173a9dbe37cbfd3@dori-us-east-1.searchly.com:80',
+    // host: '127.0.0.1:9200',
     log: ['error', 'warning']
 });
 function deleteAndCreateIndex() {
