@@ -36,6 +36,14 @@ router.get('/text/:toSearch', function (req, res) {
         res.json("[]");
     });
 });
+router.get('/coordinates/:lat/:lon', function (req, res) {
+    db.searchByCoordinates(req.params).then(function (data) {
+        res.json(data);
+    }, function (err) {
+        console.trace(err.message);
+        res.json("[]");
+    });
+})
 router.get('/text/autocomplete/:toSearch', function (req, res) {
     // console.log(req.params.toSearch);
     db.searchByText(req.params.toSearch).then(function (data) {

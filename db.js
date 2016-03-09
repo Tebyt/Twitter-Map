@@ -1,12 +1,12 @@
 
 // ElasticSearch
-var index_name = "twitter";
+var index_name = "test";
 var type_name = "tweets";
 
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({
-    host: 'paas:8fa0549c7855701ee173a9dbe37cbfd3@dori-us-east-1.searchly.com:80',
-    // host: '127.0.0.1:9200',
+    // host: 'paas:8fa0549c7855701ee173a9dbe37cbfd3@dori-us-east-1.searchly.com:80',
+    host: '127.0.0.1:9200',
     log: ['error', 'warning']
 });
 function deleteAndCreateIndex() {
@@ -15,6 +15,7 @@ function deleteAndCreateIndex() {
 function createIndexIfNotExist() {
     indexExists().then(function (exists) {
         if (!exists) {
+            console.log("index exists");
             createIndex();
         }})
 }
@@ -43,7 +44,6 @@ function initIndex() {
     });
 }
 function indexExists() {
-    console.log("index exists");
     return client.indices.exists({
         index: index_name
     });
@@ -64,14 +64,15 @@ function initMapping() {
         body: {
             "properties": {
                 "geometry": {
-                    "properties": {
-                        "coordinates": {
-                            "type": "double"
-                        },
+                    "properties" : {
                         "type": {
                             "type": "string"
+                        },
+                        "coordinates": {
+                            "type": "geo_point"
                         }
                     }
+                    
                 },
                 "properties": {
                     "properties": {
@@ -185,6 +186,34 @@ function searchByText(text) {
     })
 }
 
+function searchByCoordinates(coordinates, diameter) {
+    return client.search({
+        index: index_name,
+        type: type_name,
+        body: {
+                "query" : {
+                    "bool" : {
+                        "must" : {
+                            "match_all" : {}
+                        },
+                        "filter" : {
+                            "geo_distance" : {
+                                "distance" : "1km",
+                                "geometry.coordinates" : coordinates
+                            }
+                        }
+                    }
+                }
+            }
+    }).then(function (data) {
+        data = data.hits.hits;
+        data = data.map(function (d) {
+            return d._source
+        })
+        return data;
+    })
+}
+
 function getAllTweets() {
     return client.search({
         index: index_name,
@@ -209,5 +238,6 @@ module.exports = {
     addTweet: addTweet,
     searchByText: searchByText,
     getAllTweets: getAllTweets,
-    deleteAndCreateIndex: deleteAndCreateIndex
+    deleteAndCreateIndex: deleteAndCreateIndex,
+    searchByCoordinates: searchByCoordinates
 }
