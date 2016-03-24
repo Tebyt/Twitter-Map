@@ -16,6 +16,8 @@ The elasticsearch database is provided by [Searchly](http://www.searchly.com)
 
 **GET /autocomplete/:toSearch** Get autocomplete by text
 
+**GET /coordinates/:lat/:lon** Get tweets by coordinates
+
 **POST /:id** Post tweets by id
 
 **DELETE /** Delete all tweets
